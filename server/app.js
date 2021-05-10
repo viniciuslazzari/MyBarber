@@ -1,10 +1,13 @@
 const express = require('express');
+const config = require('config');
 const cors = require('cors');
 const app = express();
 
-require('./routes/index')(app);
+require('./src/routes/index')(app);
 
 app.use(cors());
 app.use(express.json());
 
-app.listen(process.env.PORT || 8080);
+let appPort = config.get('app.port');
+
+app.listen(appPort);
