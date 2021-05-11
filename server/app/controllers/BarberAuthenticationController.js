@@ -1,8 +1,8 @@
 const { Barbers } = require('../models');
-const jwtAuthentication = require('../services/jwtAuthentication')
+const loginAuthentication = require('../services/loginAuthentication')
 
 module.exports = {
-	async authenticate(req, res, next) {
+	async login(req, res, next) {
 		const login = {
 			email: req.body.email,
 			password: req.body.password
@@ -11,7 +11,7 @@ module.exports = {
 		Barbers.findOne({ where: { Email: login.email } })
 			.then(data => {
 				if (data) {
-					jwtAuthentication.login(login, data)
+					loginAuthentication.login(login, data)
 						.then(message => {
 							res.status(200).send(message)
 						}).catch(err => {
@@ -24,5 +24,9 @@ module.exports = {
 			.catch(err => {
 				res.status(500).send({ message: err.message });
 			});
+	},
+
+	async logout(req, res, next) {
+		res.status(200).send({ auth: false, token: null })
 	},
 }

@@ -1,5 +1,6 @@
 const BarberAuthenticationController = require('../controllers/BarberAuthenticationController');
 
 module.exports = (app) => {
-	app.post('/barberauth', BarberAuthenticationController.authenticate);
+	app.post('/barber/login', BarberAuthenticationController.login);
+	app.post('/barber/logout', BarberAuthenticationController.logout);
 }

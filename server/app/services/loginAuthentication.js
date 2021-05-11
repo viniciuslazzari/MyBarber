@@ -14,11 +14,11 @@ module.exports = {
 						expiresIn: 300
 					});
 
-					res({ token: token })
+					res({ auth: true, token: token })
 				} else {
 					res({ message: "Password doesnt matches!" })
 				}
 			})
 		})
-	}
+	},
 }
