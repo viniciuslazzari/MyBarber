@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt')
+const config = require('../../config/default')
+
 module.exports = (sequelize, Sequelize) => {
 	const Barber = sequelize.define("Barbers", {
 		BarberId: {
@@ -30,6 +33,26 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.DATE,
 			allowNull: false
 		}
+	});
+
+	Barber.addHook('beforeCreate', (barber, options) => {
+		return bcrypt.hash(barber.Password, config.encryptsalt)
+			.then(hash => {
+				barber.Password = hash;
+			})
+			.catch(err => {
+				throw new Error();
+			});
+	});
+
+	Barber.addHook('beforeBulkUpdate', (barber, options) => {
+		return bcrypt.hash(barber.attributes.Password, config.encryptsalt)
+			.then(hash => {
+				barber.attributes.Password = hash;
+			})
+			.catch(err => {
+				throw new Error();
+			});
 	});
 
 	return Barber;

@@ -49,9 +49,7 @@ module.exports = {
 			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
 		};
 
-		Barbers.update(barber, {
-			where: { BarberId: id }
-		})
+		Barbers.update(barber, { where: { BarberId: id } })
 			.then(num => {
 				if (num == 1) {
 					res.send({ message: "Barber was updated successfully." });
