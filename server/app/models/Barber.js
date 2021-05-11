@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-	const Barber = sequelize.define("Barber", {
+	const Barber = sequelize.define("Barbers", {
 		BarberId: {
 			type: Sequelize.INTEGER,
 			autoIncrement: true,
@@ -20,6 +20,14 @@ module.exports = (sequelize, Sequelize) => {
 		},
 		LastName: {
 			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		createdAt: {
+			type: Sequelize.DATE,
+			allowNull: false
+		},
+		updatedAt: {
+			type: Sequelize.DATE,
 			allowNull: false
 		}
 	});

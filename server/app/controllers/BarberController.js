@@ -1,15 +1,16 @@
-const { Barber } = require('../models/');
+const { Barbers } = require('../models');
+const moment = require('moment');
 
 module.exports = {
 	async get(req, res, next) {
-		const users = await Barber.findAll();
-		res.status(200).send(users);
+		const barbers = await Barbers.findAll();
+		res.status(200).send(barbers);
 	},
 
 	async getById(req, res, next) {
 		const id = req.params.id;
 
-		Barber.findByPk(id)
+		Barbers.findByPk(id)
 			.then(data => {
 				res.send(data);
 			})
@@ -32,10 +33,12 @@ module.exports = {
 			Email: req.body.email,
 			Password: req.body.password,
 			FirstName: req.body.firstname,
-			LastName: req.body.lastname
+			LastName: req.body.lastname,
+			createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
 		};
 
-		Barber.create(barber)
+		Barbers.create(barber)
 			.then(data => {
 				res.send(data);
 			})
