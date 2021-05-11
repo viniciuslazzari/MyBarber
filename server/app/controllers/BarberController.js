@@ -15,20 +15,11 @@ module.exports = {
 				res.send(data);
 			})
 			.catch(err => {
-				res.status(500).send({
-					message: "Error retrieving Tutorial with id=" + id
-				});
+				res.status(500).send({ message: err.message });
 			});
 	},
 
 	async post(req, res, next) {
-		if (!req.body) {
-			res.status(400).send({
-				message: "Content can not be empty!"
-			});
-			return;
-		}
-
 		const barber = {
 			Email: req.body.email,
 			Password: req.body.password,
@@ -43,20 +34,49 @@ module.exports = {
 				res.send(data);
 			})
 			.catch(err => {
-				res.status(500).send({
-					message:
-						err.message || "Some error occurred while creating the Tutorial."
-				});
+				res.status(500).send({ message: err.message });
 			});
 	},
 
 	async put(req, res, next) {
-		let id = req.params.id;
-		res.status(201).send(`Rota PUT com ID! --> ${id}`);
+		const id = req.params.id;
+
+		const barber = {
+			Email: req.body.email,
+			Password: req.body.password,
+			FirstName: req.body.firstname,
+			LastName: req.body.lastname,
+			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+		};
+
+		Barbers.update(barber, {
+			where: { BarberId: id }
+		})
+			.then(num => {
+				if (num == 1) {
+					res.send({ message: "Barber was updated successfully." });
+				} else {
+					res.send({ message: `Cannot update Barber with id=${id}. Maybe Barber was not found or req.body is empty!` });
+				}
+			})
+			.catch(err => {
+				res.status(500).send({ message: err.message });
+			});
 	},
 
 	async delete(req, res, next) {
-		let id = req.params.id;
-		res.status(200).send(`Rota DELETE com ID! --> ${id}`);
+		const id = req.params.id;
+
+		Barbers.destroy({ where: { BarberId: id } })
+			.then(num => {
+				if (num == 1) {
+					res.send({ message: "Barber was deleted successfully!" });
+				} else {
+					res.send({ message: `Cannot delete Barber with id=${id}. Maybe Barber was not found!` });
+				}
+			})
+			.catch(err => {
+				res.status(500).send({ message: err.message });
+			});
 	}
 }
