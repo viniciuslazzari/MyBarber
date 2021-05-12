@@ -21,9 +21,7 @@ module.exports = {
 					res.status(200).send({ message: "This Client doesnt exist" });
 				}
 			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async logout(req, res, next) {

@@ -1,101 +1,75 @@
 const { Orders } = require('../models');
-const moment = require('moment');
 
 module.exports = {
 	async get(req, res, next) {
-		const orders = await Orders.findAll();
-		res.status(200).send(orders);
+		const data = await Orders.findAll();
+		res.status(200).send(data);
 	},
 
 	async getById(req, res, next) {
 		const id = req.params.id;
 
 		Orders.findByPk(id)
-			.then(data => {
-				res.send(data);
-			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+			.then(data => { res.send(data); })
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async getByShopId(req, res, next) {
-		const shopid = req.params.ShopId;
+		const id = req.params.ShopId;
 
-		Shops.findAll({ where: { ShopId: shopid } })
-			.then(data => {
-				res.send(data);
-			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+		Shops.findAll({ where: { ShopId: id } })
+			.then(data => { res.send(data); })
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async getByClientId(req, res, next) {
-		const clientid = req.params.ClientId;
+		const id = req.params.ClientId;
 
-		Shops.findAll({ where: { ClientId: clientid } })
-			.then(data => {
-				res.send(data);
-			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+		Shops.findAll({ where: { ClientId: id } })
+			.then(data => { res.send(data); })
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async getByCatalogItemId(req, res, next) {
-		const catalogitemid = req.params.CatalogItemId;
+		const id = req.params.CatalogItemId;
 
-		Shops.findAll({ where: { CatalogItemId: catalogitemid } })
-			.then(data => {
-				res.send(data);
-			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+		Shops.findAll({ where: { CatalogItemId: id } })
+			.then(data => { res.send(data); })
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async post(req, res, next) {
-		const order = {
+		const model = {
 			ScheduledTime: req.body.ScheduledTime,
 			ShopId: req.body.ShopId,
 			ClientId: req.body.ClientId,
-			CatalogItemId: req.body.CatalogItemId,
-			createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+			CatalogItemId: req.body.CatalogItemId
 		};
 
-		Orders.create(order)
-			.then(data => {
-				res.send(data);
-			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+		Orders.create(model)
+			.then(data => { res.send(data); })
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async put(req, res, next) {
 		const id = req.params.id;
 
-		const order = {
+		const model = {
 			ScheduledTime: req.body.ScheduledTime,
 			ShopId: req.body.ShopId,
 			ClientId: req.body.ClientId,
-			CatalogItemId: req.body.CatalogItemId,
-			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+			CatalogItemId: req.body.CatalogItemId
 		};
 
-		Orders.update(order, { where: { OrderId: id } })
+		Orders.update(model, { where: { OrderId: id } })
 			.then(num => {
 				if (num == 1) {
 					res.send({ message: "Order was updated successfully." });
 				} else {
-					res.send({ message: `Cannot update Order with id=${id}. Maybe Order was not found or req.body is empty!` });
+					res.send({ message: `Cannot update Order with id = ${id}.` });
 				}
 			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async delete(req, res, next) {
@@ -109,8 +83,6 @@ module.exports = {
 					res.send({ message: `Cannot delete Barber with id=${id}. Maybe Barber was not found!` });
 				}
 			})
-			.catch(err => {
-				res.status(500).send({ message: err.message });
-			});
+			.catch(err => { res.status(500).send({ message: err.message }); });
 	}
 }
