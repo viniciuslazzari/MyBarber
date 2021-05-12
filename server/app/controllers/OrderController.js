@@ -4,7 +4,7 @@ const moment = require('moment');
 module.exports = {
 	async get(req, res, next) {
 		const orders = await Orders.findAll();
-		res.status(200).send(shops);
+		res.status(200).send(orders);
 	},
 
 	async getById(req, res, next) {

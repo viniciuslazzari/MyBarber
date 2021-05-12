@@ -20,6 +20,13 @@ module.exports = {
 	},
 
 	async post(req, res, next) {
+		data = await Clients.findOne({ where: { Phone: req.body.Phone } })
+
+		if (data) {
+			res.status(500).send({ message: "Phone already used." });
+			return;
+		}
+
 		const client = {
 			Phone: req.body.Phone,
 			Password: req.body.Password,

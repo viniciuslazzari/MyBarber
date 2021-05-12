@@ -20,6 +20,13 @@ module.exports = {
 	},
 
 	async post(req, res, next) {
+		data = await Barbers.findOne({ where: { Email: req.body.Email } })
+
+		if (data) {
+			res.status(500).send({ message: "Email already used." });
+			return;
+		}
+
 		const barber = {
 			Email: req.body.Email,
 			Phone: req.body.Phone,
