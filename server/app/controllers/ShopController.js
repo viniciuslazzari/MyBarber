@@ -19,10 +19,23 @@ module.exports = {
 			});
 	},
 
+	async getByBarberId(req, res, next) {
+		const barberid = req.params.barberid;
+		console.log(barberid)
+
+		Shops.findAll({ where: { BarberId: barberid } })
+			.then(data => {
+				res.send(data);
+			})
+			.catch(err => {
+				res.status(500).send({ message: err.message });
+			});
+	},
+
 	async post(req, res, next) {
 		const shop = {
-			Name: req.body.name,
-			BarberId: req.body.barberid,
+			Name: req.body.Name,
+			BarberId: req.body.BarberId,
 			createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
 			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
 		};
@@ -40,8 +53,8 @@ module.exports = {
 		const id = req.params.id;
 
 		const shop = {
-			Name: req.body.name,
-			BarberId: req.body.barberid,
+			Name: req.body.Name,
+			BarberId: req.body.BarberId,
 			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
 		};
 
