@@ -1,16 +1,16 @@
-const { Barbers } = require('../models');
+const { Clients } = require('../models');
 const moment = require('moment');
 
 module.exports = {
 	async get(req, res, next) {
-		const barbers = await Barbers.findAll();
-		res.status(200).send(barbers);
+		const clients = await Clients.findAll();
+		res.status(200).send(clients);
 	},
 
 	async getById(req, res, next) {
 		const id = req.params.id;
 
-		Barbers.findByPk(id)
+		Clients.findByPk(id)
 			.then(data => {
 				res.send(data);
 			})
@@ -20,8 +20,8 @@ module.exports = {
 	},
 
 	async post(req, res, next) {
-		const barber = {
-			Email: req.body.Email,
+		const client = {
+			Phone: req.body.Phone,
 			Password: req.body.Password,
 			FirstName: req.body.FirstName,
 			LastName: req.body.LastName,
@@ -29,7 +29,7 @@ module.exports = {
 			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
 		};
 
-		Barbers.create(barber)
+		Clients.create(client)
 			.then(data => {
 				res.send(data);
 			})
@@ -41,20 +41,20 @@ module.exports = {
 	async put(req, res, next) {
 		const id = req.params.id;
 
-		const barber = {
-			Email: req.body.Email,
+		const client = {
+			Phone: req.body.Phone,
 			Password: req.body.Password,
 			FirstName: req.body.FirstName,
 			LastName: req.body.LastName,
 			updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
 		};
 
-		Barbers.update(barber, { where: { BarberId: id } })
+		Clients.update(client, { where: { ClientId: id } })
 			.then(num => {
 				if (num == 1) {
-					res.send({ message: "Barber was updated successfully." });
+					res.send({ message: "Client was updated successfully." });
 				} else {
-					res.send({ message: `Cannot update Barber with id=${id}. Maybe Barber was not found or req.body is empty!` });
+					res.send({ message: `Cannot update Client with id=${id}. Maybe Client was not found or req.body is empty!` });
 				}
 			})
 			.catch(err => {
@@ -65,12 +65,12 @@ module.exports = {
 	async delete(req, res, next) {
 		const id = req.params.id;
 
-		Barbers.destroy({ where: { BarberId: id } })
+		Clients.destroy({ where: { ClientId: id } })
 			.then(num => {
 				if (num == 1) {
-					res.send({ message: "Barber was deleted successfully!" });
+					res.send({ message: "Client was deleted successfully!" });
 				} else {
-					res.send({ message: `Cannot delete Barber with id=${id}. Maybe Barber was not found!` });
+					res.send({ message: `Cannot delete Client with id=${id}. Maybe Client was not found!` });
 				}
 			})
 			.catch(err => {
