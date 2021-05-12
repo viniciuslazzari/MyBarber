@@ -13,6 +13,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING(255),
 			allowNull: false
 		},
+		Phone: {
+			type: Sequelize.STRING(20),
+			allowNull: false
+		},
 		Password: {
 			type: Sequelize.STRING(60),
 			allowNull: false

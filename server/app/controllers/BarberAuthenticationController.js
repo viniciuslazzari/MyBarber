@@ -4,11 +4,11 @@ const loginAuthentication = require('../services/loginAuthentication')
 module.exports = {
 	async login(req, res, next) {
 		const login = {
-			email: req.body.email,
-			password: req.body.password
+			Email: req.body.Email,
+			Password: req.body.Password
 		}
 
-		Barbers.findOne({ where: { Email: login.email } })
+		Barbers.findOne({ where: { Email: login.Email } })
 			.then(data => {
 				if (data) {
 					loginAuthentication.login(login, data)

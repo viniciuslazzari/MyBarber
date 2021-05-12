@@ -22,6 +22,7 @@ module.exports = {
 	async post(req, res, next) {
 		const barber = {
 			Email: req.body.Email,
+			Phone: req.body.Phone,
 			Password: req.body.Password,
 			FirstName: req.body.FirstName,
 			LastName: req.body.LastName,
@@ -43,6 +44,7 @@ module.exports = {
 
 		const barber = {
 			Email: req.body.Email,
+			Phone: req.body.Phone,
 			Password: req.body.Password,
 			FirstName: req.body.FirstName,
 			LastName: req.body.LastName,
