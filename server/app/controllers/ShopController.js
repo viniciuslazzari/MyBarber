@@ -20,8 +20,7 @@ module.exports = {
 	},
 
 	async getByBarberId(req, res, next) {
-		const barberid = req.params.barberid;
-		console.log(barberid)
+		const barberid = req.params.BarberId;
 
 		Shops.findAll({ where: { BarberId: barberid } })
 			.then(data => {

@@ -19,6 +19,18 @@ module.exports = {
 			});
 	},
 
+	async getByShopId(req, res, next) {
+		const shopid = req.params.ShopId;
+
+		CatalogItens.findAll({ where: { ShopId: shopid } })
+			.then(data => {
+				res.send(data);
+			})
+			.catch(err => {
+				res.status(500).send({ message: err.message });
+			});
+	},
+
 	async post(req, res, next) {
 		const catalogItem = {
 			Name: req.body.Name,
