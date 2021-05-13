@@ -1,4 +1,4 @@
-const { Orders } = require('../models');
+const { Shops, CatalogItens, Clients, Orders } = require('../models');
 
 module.exports = {
 	async get(req, res, next) {
@@ -17,7 +17,7 @@ module.exports = {
 	async getByShopId(req, res, next) {
 		const id = req.params.ShopId;
 
-		Shops.findAll({ where: { ShopId: id } })
+		Orders.findAll({ where: { ShopId: id } })
 			.then(data => { res.send(data); })
 			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
@@ -25,7 +25,7 @@ module.exports = {
 	async getByClientId(req, res, next) {
 		const id = req.params.ClientId;
 
-		Shops.findAll({ where: { ClientId: id } })
+		Orders.findAll({ where: { ClientId: id } })
 			.then(data => { res.send(data); })
 			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
@@ -33,16 +33,26 @@ module.exports = {
 	async getByCatalogItemId(req, res, next) {
 		const id = req.params.CatalogItemId;
 
-		Shops.findAll({ where: { CatalogItemId: id } })
+		Orders.findAll({ where: { CatalogItemId: id } })
 			.then(data => { res.send(data); })
 			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
 	async post(req, res, next) {
+		shop = await Shops.findOne({ where: { ShopId: req.body.ShopId } })
+		client = await Clients.findOne({ where: { ClientId: req.body.ClientId } })
+		catalogItem = await CatalogItens.findOne({ where: { CatalogItemId: req.body.CatalogItemId } })
+
 		const model = {
 			ScheduledTime: req.body.ScheduledTime,
+			ShopName: shop.Name,
 			ShopId: req.body.ShopId,
+			ClientFirstName: client.FirstName,
+			ClientLastName: client.LastName,
 			ClientId: req.body.ClientId,
+			CatalogItemName: catalogItem.Name,
+			CatalogItemPrice: catalogItem.Price,
+			CatalogItemEstimatedTime: catalogItem.EstimatedTime,
 			CatalogItemId: req.body.CatalogItemId
 		};
 
@@ -78,9 +88,9 @@ module.exports = {
 		Orders.destroy({ where: { OrderId: id } })
 			.then(num => {
 				if (num == 1) {
-					res.send({ message: "Barber was deleted successfully!" });
+					res.send({ message: "Order was deleted successfully!" });
 				} else {
-					res.send({ message: `Cannot delete Barber with id=${id}. Maybe Barber was not found!` });
+					res.send({ message: `Cannot delete Order with id=${id}. Maybe Order was not found!` });
 				}
 			})
 			.catch(err => { res.status(500).send({ message: err.message }); });

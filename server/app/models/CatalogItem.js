@@ -24,7 +24,9 @@ module.exports = (sequelize, Sequelize) => {
 			references: {
 				model: 'Shops',
 				key: 'ShopId'
-			}
+			},
+			onUpdate: 'CASCADE',
+			onDelete: 'CASCADE'
 		},
 		createdAt: {
 			type: Sequelize.DATE,

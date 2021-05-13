@@ -9,25 +9,19 @@ module.exports = {
         allowNull: false,
         primaryKey: true
       },
-      Email: {
+      Name: {
         type: Sequelize.STRING(255),
         allowNull: false
       },
-      Phone: {
-        type: Sequelize.STRING(20),
-        allowNull: false
-      },
-      Password: {
-        type: Sequelize.STRING(60),
-        allowNull: false
-      },
-      FirstName: {
-        type: Sequelize.STRING(255),
-        allowNull: false
-      },
-      LastName: {
-        type: Sequelize.STRING(255),
-        allowNull: false
+      ShopId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Shops',
+          key: 'ShopId'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -39,6 +33,7 @@ module.exports = {
       }
     });
   },
+
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Barbers');
   }

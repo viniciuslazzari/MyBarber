@@ -10,13 +10,15 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING(255),
 			allowNull: false
 		},
-		BarberId: {
+		OwnerId: {
 			type: Sequelize.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'Barbers',
-				key: 'BarberId'
-			}
+				model: 'Owners',
+				key: 'OwnerId'
+			},
+			onUpdate: 'CASCADE',
+			onDelete: 'CASCADE'
 		},
 		createdAt: {
 			type: Sequelize.DATE,
