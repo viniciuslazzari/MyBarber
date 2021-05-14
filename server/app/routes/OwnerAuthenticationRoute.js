@@ -2,5 +2,4 @@ const OwnerAuthenticationController = require('../controllers/OwnerAuthenticatio
 
 module.exports = (app) => {
 	app.post('/owner/login', OwnerAuthenticationController.login);
-	app.post('/owner/logout', OwnerAuthenticationController.logout);
 }

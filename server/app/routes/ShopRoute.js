@@ -1,10 +1,12 @@
 const ShopController = require('../controllers/ShopController');
+const JWTAuthentication = require('../services/JWTAuthentication')
 
 module.exports = (app) => {
 	app.get('/shops', ShopController.get);
-	app.get('/shopsbybarber/:Barberid', ShopController.getByBarberId)
-	app.get('/shop/:id', ShopController.getById);
+	app.get('/owner/:OwnerId/shops', JWTAuthentication.verifyJWT, ShopController.getByOwnerId)
+	app.get('/shop/:id', JWTAuthentication.verifyJWT, ShopController.getById);
 	app.post('/shop', ShopController.post);
-	app.put('/shop/:id', ShopController.put);
-	app.delete('/shop/:id', ShopController.delete);
+	app.post('/ownerhasshop', ShopController.ownerHasShop);
+	app.put('/shop/:id', JWTAuthentication.verifyJWT, ShopController.put);
+	app.delete('/shop/:id', JWTAuthentication.verifyJWT, ShopController.delete);
 }

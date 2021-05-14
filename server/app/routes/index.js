@@ -1,3 +1,4 @@
+const BarberRoute = require('./BarberRoute');
 const OwnerRoute = require('./OwnerRoute');
 const OwnerAuthenticationRoute = require('./OwnerAuthenticationRoute');
 const ShopRoute = require('./ShopRoute');
@@ -8,6 +9,7 @@ const OrderRoute = require('./OrderRoute');
 const OperationHoursRoute = require('./OperationHoursRoute');
 
 module.exports = (app) => {
+	BarberRoute(app)
 	OwnerRoute(app)
 	OwnerAuthenticationRoute(app)
 	ShopRoute(app)
