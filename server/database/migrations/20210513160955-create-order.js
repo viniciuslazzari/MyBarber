@@ -10,7 +10,7 @@ module.exports = {
         primaryKey: true
       },
       ScheduledTime: {
-        type: Sequelize.TIME,
+        type: Sequelize.DATE,
         allowNull: false
       },
       BarberFirstName: {
