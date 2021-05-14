@@ -1,11 +1,22 @@
 import React from 'react';
-import axios from 'axios';
+import api from "../services/api";
+import { handleLogin } from '../services/auth'
+import { Redirect } from 'react-router-dom';
 
 interface IProps { }
 
 interface IState {
 	email: string
 	password: string
+	redirect: boolean
+}
+
+interface ApiResponse {
+	data: {
+		auth: any;
+		token: string;
+		message: any;
+	};
 }
 
 class OwnerLogin extends React.Component<IProps, IState> {
@@ -14,7 +25,8 @@ class OwnerLogin extends React.Component<IProps, IState> {
 
 		this.state = {
 			email: '',
-			password: ''
+			password: '',
+			redirect: false
 		};
 
 		this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -30,9 +42,16 @@ class OwnerLogin extends React.Component<IProps, IState> {
 			Password: this.state.password
 		};
 
-		axios.post('http://localhost:8080/owner/login', login)
-			.then(response => { console.log(response) })
-			.catch(err => { console.log(err) });
+		api.post('/owner/login', login)
+			.then((response: ApiResponse) => {
+				if (response.data.auth) {
+					handleLogin(response.data.token)
+					this.setState({ redirect: true })
+				} else {
+					alert(response.data.message)
+				}
+			})
+			.catch((err: any) => { console.log(err) });
 	}
 
 	handleEmailChange(event: any) {
@@ -44,6 +63,12 @@ class OwnerLogin extends React.Component<IProps, IState> {
 	}
 
 	render() {
+		const redirect = this.state.redirect;
+
+		if (redirect) {
+			return <Redirect to='/owner' />;
+		}
+
 		return (
 			<div className="OwnerLogin">
 				<form>
