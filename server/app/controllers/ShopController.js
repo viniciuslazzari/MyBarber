@@ -14,18 +14,36 @@ module.exports = {
 			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
-	async getByBarberId(req, res, next) {
-		const id = req.params.BarberId;
+	async getByOwnerId(req, res, next) {
+		const id = req.params.OwnerId;
 
-		Shops.findAll({ where: { BarberId: id } })
+		Shops.findAll({ where: { OwnerId: id } })
 			.then(data => { res.send(data); })
 			.catch(err => { res.status(500).send({ message: err.message }); });
+	},
+
+	async ownerHasShop(req, res, next) {
+		const model = {
+			OwnerId: req.body.OwnerId,
+			ShopId: req.body.ShopId
+		};
+
+		Shops.findAll({ where: { OwnerId: model.OwnerId } })
+			.then(data => {
+				const shopsIds = data.map(item => item.ShopId);
+				if (shopsIds.includes(parseInt(model.ShopId))) {
+					res.send({ ownerHasShop: true });
+				} else {
+					res.send({ ownerHasShop: false });
+				}
+			})
+			.catch(err => { res.status(500).send({ message: err.message }); })
 	},
 
 	async post(req, res, next) {
 		const model = {
 			Name: req.body.Name,
-			BarberId: req.body.BarberId
+			OwnerId: req.body.OwnerId
 		};
 
 		Shops.create(model)
@@ -38,15 +56,15 @@ module.exports = {
 
 		const model = {
 			Name: req.body.Name,
-			BarberId: req.body.BarberId
+			OwnerId: req.body.OwnerId
 		};
 
 		Shops.update(model, { where: { ShopId: id } })
 			.then(num => {
 				if (num == 1) {
-					res.send({ message: "Barber was updated successfully." });
+					res.send({ message: "Shop was updated successfully." });
 				} else {
-					res.send({ message: `Cannot update Barber with id=${id}. Maybe Barber was not found or req.body is empty!` });
+					res.send({ message: `Cannot update Shop with id=${id}. Maybe Shop was not found or req.body is empty!` });
 				}
 			})
 			.catch(err => { res.status(500).send({ message: err.message }); });
@@ -58,9 +76,9 @@ module.exports = {
 		Shops.destroy({ where: { ShopId: id } })
 			.then(num => {
 				if (num == 1) {
-					res.send({ message: "Barber was deleted successfully!" });
+					res.send({ message: "Shop was deleted successfully!" });
 				} else {
-					res.send({ message: `Cannot delete Barber with id=${id}. Maybe Barber was not found!` });
+					res.send({ message: `Cannot delete Shop with id=${id}. Maybe Shop was not found!` });
 				}
 			})
 			.catch(err => { res.status(500).send({ message: err.message }); });

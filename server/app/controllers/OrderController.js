@@ -1,4 +1,8 @@
-const { Shops, CatalogItens, Clients, Orders } = require('../models');
+const { Shops, CatalogItens, Clients, Barbers, Orders } = require('../models');
+const Barber = require('../models/Barber');
+const moment = require('moment')
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
 	async get(req, res, next) {
@@ -14,10 +18,26 @@ module.exports = {
 			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
 
-	async getByShopId(req, res, next) {
+	async getByBarberId(req, res, next) {
 		const id = req.params.ShopId;
 
-		Orders.findAll({ where: { ShopId: id } })
+		Orders.findAll({ where: { BarberId: id } })
+			.then(data => { res.send(data); })
+			.catch(err => { res.status(500).send({ message: err.message }); });
+	},
+
+	async getByShopId(req, res, next) {
+		const id = req.params.ShopId;
+		const now = moment()
+
+		Orders.findAll({
+			where: {
+				ScheduledTime: {
+					[Op.between]: [now.startOf('day').toString(), now.endOf('day').toString()],
+				},
+				ShopId: id
+			}
+		})
 			.then(data => { res.send(data); })
 			.catch(err => { res.status(500).send({ message: err.message }); });
 	},
@@ -42,9 +62,13 @@ module.exports = {
 		shop = await Shops.findOne({ where: { ShopId: req.body.ShopId } })
 		client = await Clients.findOne({ where: { ClientId: req.body.ClientId } })
 		catalogItem = await CatalogItens.findOne({ where: { CatalogItemId: req.body.CatalogItemId } })
+		barber = await Barbers.findOne({ where: { BarberId: req.body.BarberId } })
 
 		const model = {
 			ScheduledTime: req.body.ScheduledTime,
+			BarberFirstName: barber.FirstName,
+			BarberLastName: barber.LastName,
+			BarberId: req.body.BarberId,
 			ShopName: shop.Name,
 			ShopId: req.body.ShopId,
 			ClientFirstName: client.FirstName,
@@ -63,11 +87,24 @@ module.exports = {
 
 	async put(req, res, next) {
 		const id = req.params.id;
+		shop = await Shops.findOne({ where: { ShopId: req.body.ShopId } })
+		client = await Clients.findOne({ where: { ClientId: req.body.ClientId } })
+		catalogItem = await CatalogItens.findOne({ where: { CatalogItemId: req.body.CatalogItemId } })
+		Barber = await Barbers.findOne({ where: { BarberId: req.body.BarberId } })
 
 		const model = {
 			ScheduledTime: req.body.ScheduledTime,
+			BarberFirstName: Barber.FirstName,
+			BarberLastName: Barber.LastName,
+			BarberId: req.body.BarberId,
+			ShopName: shop.Name,
 			ShopId: req.body.ShopId,
+			ClientFirstName: client.FirstName,
+			ClientLastName: client.LastName,
 			ClientId: req.body.ClientId,
+			CatalogItemName: catalogItem.Name,
+			CatalogItemPrice: catalogItem.Price,
+			CatalogItemEstimatedTime: catalogItem.EstimatedTime,
 			CatalogItemId: req.body.CatalogItemId
 		};
 
