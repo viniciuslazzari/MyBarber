@@ -6,10 +6,8 @@ module.exports = {
 			bcrypt.compare(login.Password, user.Password, function (err, isMatch) {
 				if (err) {
 					rej({ message: err.message })
-				} else if (isMatch) {
-					res(true)
 				} else {
-					res(false)
+					res(isMatch)
 				}
 			})
 		})
